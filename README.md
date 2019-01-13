@@ -1,6 +1,6 @@
 # fzf-source.vim
 
-> fzf source of fzf source for (neo)vim
+> denite source of fzf source
 
 # install
 
@@ -13,5 +13,10 @@ Plug 'iamcco/fzf-source.vim'
 # usage
 
 ```viml
-:call fzfsource#list()
+:Denite fzf
 ```
+
+actions:
+
+- trigger: trigger fzf source without args
+- args: trigger fzf source with args

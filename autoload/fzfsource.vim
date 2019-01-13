@@ -1,4 +1,4 @@
-let s:source = map([
+let s:source = [
       \  'Files',
       \  'GitFiles',
       \  'GFiles',
@@ -21,22 +21,30 @@ let s:source = map([
       \  'Maps',
       \  'Filetypes',
       \  'History'
-      \], 'get(g:, "fzf_command_prefix", "") . v:val')
+      \]
 
-function s:rollback(...) abort
-  set noinsertmode
+function! fzfsource#get_fzf_commands() abort
+  if get(g:, 'fzf_command_prefix', '') ==# ''
+    return s:source
+  endif
+  redir => l:commands
+  silent command
+  redir END
+  let l:reg = '\v.{4}' . g:fzf_command_prefix . '([^ ]+\s+[^ ]).*$'
+  let l:fzf_commands = map(
+        \  filter(
+        \    split(l:commands, '\n'),
+        \    'v:val =~# l:reg'
+        \  ),
+        \  'substitute(v:val, l:reg, "\\1", "")'
+        \)
+  return l:fzf_commands
 endfunction
 
-function s:do_action(source) abort
-  execute a:source
-  set insertmode
-  call timer_start(100, function('s:rollback'))
-endfunction
-
-function fzfsource#list() abort
-  call fzf#run({
-        \ 'source': s:source,
-        \ 'sink': function('s:do_action'),
-        \ 'down': '30%',
-        \})
+function! fzfsource#do_action(...) abort
+  let l:command = get(g:, 'fzf_command_prefix', '') . get(split(get(a:000, '0', ''), ' '), '0', '')
+  let l:args = get(a:000, '1', [])
+  if l:command !=# ''
+    execute l:command . ' ' . join(l:args, ' ')
+  endif
 endfunction
