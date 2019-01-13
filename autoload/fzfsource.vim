@@ -1,4 +1,4 @@
-let s:source = [
+let s:source = map([
       \  'Files',
       \  'GitFiles',
       \  'GFiles',
@@ -21,7 +21,7 @@ let s:source = [
       \  'Maps',
       \  'Filetypes',
       \  'History'
-      \ ]
+      \], 'get(g:, "fzf_command_prefix", "") . v:val')
 
 function s:rollback(...) abort
   set noinsertmode
@@ -35,7 +35,7 @@ endfunction
 
 function fzfsource#list() abort
   call fzf#run({
-        \ 'source': map(s:source, 'get(g:, "fzf_command_prefix", "") . v:val'),
+        \ 'source': s:source,
         \ 'sink': function('s:do_action'),
         \ 'down': '30%',
         \})
