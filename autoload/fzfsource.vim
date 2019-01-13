@@ -28,14 +28,14 @@ function s:rollback(...) abort
 endfunction
 
 function s:do_action(source) abort
-  execute get(g:, 'fzf_command_prefix', '') . a:source
+  execute a:source
   set insertmode
   call timer_start(100, function('s:rollback'))
 endfunction
 
 function fzfsource#list() abort
   call fzf#run({
-        \ 'source': s:source,
+        \ 'source': map(s:source, 'get(g:, "fzf_command_prefix", "") . v:val'),
         \ 'sink': function('s:do_action'),
         \ 'down': '30%',
         \})
