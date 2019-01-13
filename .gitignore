@@ -1,0 +1,15 @@
+
+# create by https://github.com/iamcco/gitignore.vim
+# gitignore templates from https://github.com/dvcs/gitignore
+
+### Vim.gitignore ###
+# swap
+.sw[a-p]
+.*.sw[a-p]
+# session
+Session.vim
+# temporary
+.netrwhist
+*~
+# auto-generated tag files
+tags
